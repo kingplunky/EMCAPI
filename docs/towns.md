@@ -222,7 +222,7 @@ Example POST response
         "uuid": "8391474f-4b57-412a-a835-96bd2c253219"
       }
     ],
-    "quarters": [ // The UUID of every quarter in this town, can be looked up in the quarter's endpoint, empty if none are present
+    "quarters": [ // The UUID of every quarter in this town, can be looked up in the quarter's oldendpoint, empty if none are present
       "8a7c56d1-d45a-4f5f-ac42-751c2e8c1b3d",
       "aeac5e83-62e5-421d-9737-9f33825479ec",
       "49a4da60-4589-45ff-a0ba-0fd54c45ba9f",
