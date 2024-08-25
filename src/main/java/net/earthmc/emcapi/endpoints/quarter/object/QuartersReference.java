@@ -1,11 +1,12 @@
-package net.earthmc.emcapi.endpoints.town.object;
+package net.earthmc.emcapi.endpoints.quarter.object;
 
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import net.earthmc.emcapi.common.annotations.UseSuperClass;
 import net.earthmc.emcapi.common.object.Reference;
 
+@Getter
 @SuperBuilder
 @UseSuperClass
-public class TownReference extends Reference {
-
+public class QuartersReference extends Reference {
 }

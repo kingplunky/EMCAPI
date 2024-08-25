@@ -25,7 +25,7 @@ public class PlayerEndpoint extends Endpoint<Player> {
 
     @Override
     public String getPath() {
-        return "/player";
+        return "/players";
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PlayerEndpoint extends Endpoint<Player> {
 
                 .timestamps(PlayerTimestamps.builder()
                         .registered(resident.getRegistered())
-                        .joinedTownAt(resident.hasTown() ? resident.getJoinedTownAt() : null)
+                          .joinedTownAt(resident.hasTown() ? resident.getJoinedTownAt() : null)
                         .lastOnline(resident.getLastOnline() != 0 ? resident.getLastOnline() : null)
                         .build())
 

@@ -3,6 +3,7 @@ package net.earthmc.emcapi.manager;
 import io.javalin.Javalin;
 import net.earthmc.emcapi.common.Endpoint;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
+import net.earthmc.emcapi.endpoints.town.TownEndpoint;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -18,7 +19,8 @@ public class EndpointManager {
         BASE_URL = "v3/" + config.getString("networking.url_path");
 
         endpoints = new ArrayList<>(List.of(
-                new PlayerEndpoint(javalin, economy)
+                new PlayerEndpoint(javalin, economy),
+                new TownEndpoint(javalin)
         ));
     }
 

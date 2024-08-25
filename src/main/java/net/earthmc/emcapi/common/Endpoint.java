@@ -3,49 +3,71 @@ package net.earthmc.emcapi.common;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import net.earthmc.emcapi.common.interfaces.IEndpoint;
-import net.earthmc.emcapi.common.interfaces.IQuery;
 import net.earthmc.emcapi.manager.EndpointManager;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Endpoint<T> implements IEndpoint<T> {
     protected ObjectMapper objectMapper;
-    private Javalin javalin;
+    private final Javalin javalin;
     protected Class<T> clazz;
+    private LoadingCache<String, List<T>> objectsCache;
+    private LoadingCache<T, String> serialzeCache;
 
     public Endpoint(Javalin javalin) {
         this.javalin = javalin;
     }
 
-
     public void setup() {
         objectMapper = createObjectMapper();
 
+        objectsCache = Caffeine.newBuilder()
+                .maximumSize(1)
+                .refreshAfterWrite(Duration.ofSeconds(10))
+                .build(key -> this.createObjects());
+
         String path = EndpointManager.BASE_URL + this.getPath();
         javalin.post(path , ctx -> {
-            Query<T> query = javalinContextToQuery(ctx);
-            if (query == null) return;
+            List<Query<T>> queries = javalinContextToQuery(ctx);
+            if (queries == null) return;
 
-            ctx.json(this.query(query));
+            List<T> results = this.query(queries);
+
+            int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+
+            try {
+                ctx.json(new PaginatedResponse<T>(results, page, 300));
+
+            } catch (IllegalArgumentException e) {
+                ctx.status(400).result(e.getMessage());
+            }
 
         });
     }
 
 
 
-    private Query<T> javalinContextToQuery(Context ctx) {
+    private List<Query<T>> javalinContextToQuery(Context ctx) {
         try {
-            Query<T> query = objectMapper.readValue(ctx.body(), new TypeReference<Query<T>>() {});
+            List<Query<T>> queries = objectMapper.readValue(ctx.body(), new TypeReference<List<Query<T>>>() {});
+            List<String> errors = new ArrayList<>();
 
-            List<String> errors = query.validate();
+            for (Query<T> q : queries) {
+                errors.addAll(q.validate());
+            }
+
             if (!errors.isEmpty()) {ctx.status(400).json(errors); return null;}
 
-            return query;
+            return queries;
 
         } catch (Exception e) {
             ctx.status(400).result("Invalid json body: " + e.getMessage());
@@ -69,17 +91,19 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
         ObjectMapper objectMapper = new ObjectMapper();
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(Query.class, new QueryDeserializer<>(clazz));
+        module.addDeserializer(List.class, new QueryDeserializer<>(clazz));
         objectMapper.registerModule(module);
 
         return objectMapper;
     }
 
     @Override
-    public List<T> query(IQuery<T> query) {
-        List<T> objects = this.createObjects();
+    public List<T> query(List<Query<T>> queries) {
+        return objectsCache.get("").stream()
+                .filter(object -> queries.stream().allMatch(query -> query.matches(object)))
+                .toList();
 
-        return objects.stream().filter(query::matches).toList();
     }
+
 
 }

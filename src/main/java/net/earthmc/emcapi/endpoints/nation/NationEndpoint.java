@@ -20,7 +20,7 @@ public class NationEndpoint extends Endpoint<Nation> {
 
     @Override
     public String getPath() {
-        return "/player";
+        return "/nations";
     }
 
     @Override

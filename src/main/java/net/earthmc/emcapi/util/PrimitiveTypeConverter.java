@@ -1,5 +1,6 @@
 package net.earthmc.emcapi.util;
 
+import javax.lang.model.type.NullType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class PrimitiveTypeConverter {
         typeConverters.put(Byte.class, Byte::parseByte);
         typeConverters.put(byte.class, Byte::parseByte);
         typeConverters.put(UUID.class, UUID::fromString);
+        typeConverters.put(NullType.class, value -> null);
 
     }
 
@@ -34,7 +36,7 @@ public class PrimitiveTypeConverter {
         return typeConverters.get(targetType).apply(value);
     }
 
-    public boolean isPrimitive(Class<?> type) {
+    public boolean isSupported(Class<?> type) {
         return typeConverters.containsKey(type);
     }
 
