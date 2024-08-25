@@ -7,7 +7,7 @@ import java.util.List;
 @Getter
 public class PaginatedResponse<T> {
 
-    private final List<T> data;
+    private final List<T> results;
     private final int numResults;
     private final int numPages;
     private final int currentPage;
@@ -18,7 +18,7 @@ public class PaginatedResponse<T> {
         this.pageSize = pageSize;
         this.numPages = (int) Math.ceil((double) numResults / pageSize);
         this.currentPage = currentPage;
-        this.data = this.numResults == 0 ? List.of() : getPaginatedItems(results);
+        this.results = this.numResults == 0 ? List.of() : getPaginatedItems(results);
     }
 
     private List<T> getPaginatedItems(List<T> results) {
