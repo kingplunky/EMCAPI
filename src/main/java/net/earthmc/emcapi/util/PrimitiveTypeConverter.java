@@ -19,8 +19,8 @@ public class PrimitiveTypeConverter {
         typeConverters.put(double.class, Double::parseDouble);
         typeConverters.put(Float.class, Float::parseFloat);
         typeConverters.put(float.class, Float::parseFloat);
-        typeConverters.put(Boolean.class, Boolean::parseBoolean);
-        typeConverters.put(boolean.class, Boolean::parseBoolean);
+        typeConverters.put(Boolean.class, this::strictParseBoolean);
+        typeConverters.put(boolean.class, this::strictParseBoolean);
         typeConverters.put(Character.class, value -> value.length() == 1 ? value.charAt(0) : null);
         typeConverters.put(char.class, value -> value.length() == 1 ? value.charAt(0) : null);
         typeConverters.put(Short.class, Short::parseShort);
@@ -28,8 +28,6 @@ public class PrimitiveTypeConverter {
         typeConverters.put(Byte.class, Byte::parseByte);
         typeConverters.put(byte.class, Byte::parseByte);
         typeConverters.put(UUID.class, UUID::fromString);
-        typeConverters.put(NullType.class, value -> null);
-
     }
 
     public Object castStringToType(String value, Class<?> targetType) {
@@ -38,6 +36,16 @@ public class PrimitiveTypeConverter {
 
     public boolean isSupported(Class<?> type) {
         return typeConverters.containsKey(type);
+    }
+
+    private boolean strictParseBoolean(String value) {
+        if ("true".equalsIgnoreCase(value)) {
+            return true;
+        } else if ("false".equalsIgnoreCase(value)) {
+            return false;
+        } else {
+            throw new IllegalArgumentException("Invalid boolean value: " + value + ". Only 'true' or 'false' are allowed.");
+        }
     }
 
 }
