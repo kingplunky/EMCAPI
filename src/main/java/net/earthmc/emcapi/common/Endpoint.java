@@ -22,7 +22,6 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
     private final Javalin javalin;
     protected Class<T> clazz;
     private LoadingCache<String, List<T>> objectsCache;
-    private LoadingCache<T, String> serialzeCache;
 
     public Endpoint(Javalin javalin) {
         this.javalin = javalin;
@@ -46,7 +45,7 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
             int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
 
             try {
-                ctx.json(new PaginatedResponse<T>(results, page, 300));
+                ctx.json(new PaginatedResponse<T>(results, page, 100));
 
             } catch (IllegalArgumentException e) {
                 ctx.status(400).result(e.getMessage());
@@ -60,11 +59,11 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
     private List<Query<T>> javalinContextToQuery(Context ctx) {
         try {
             List<Query<T>> queries = objectMapper.readValue(ctx.body(), new TypeReference<List<Query<T>>>() {});
-            List<String> errors = new ArrayList<>();
 
-            for (Query<T> q : queries) {
-                errors.addAll(q.validate());
-            }
+            List<String> errors = queries.stream()
+                    .flatMap(q -> q.validate().stream())
+                    .toList();
+
 
             if (!errors.isEmpty()) {ctx.status(400).json(errors); return null;}
 
