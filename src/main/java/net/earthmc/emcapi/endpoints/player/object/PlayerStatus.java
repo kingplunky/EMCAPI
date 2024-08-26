@@ -4,15 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
+
 @Builder
 public class PlayerStatus {
-    @JsonProperty("isOnline")
     private boolean isOnline;
-    @JsonProperty("isNPC")
     private boolean isNPC;
-    @JsonProperty("isMayor")
     private boolean isMayor;
-    @JsonProperty("isKing")
     private boolean isKing;
 
     @JsonProperty("hasTown")
@@ -20,19 +17,19 @@ public class PlayerStatus {
     @JsonProperty("hasNation")
     @Getter private boolean hasNation;
 
-    public boolean isKing() {
+    public boolean getIsKing() {
         return isKing;
     }
 
-    public boolean isMayor() {
+    public boolean getIsMayor() {
         return isMayor;
     }
 
-    public boolean isNPC() {
+    public boolean getIsNPC() {
         return isNPC;
     }
 
-    public boolean isOnline() {
+    public boolean getIsOnline() {
         return isOnline;
     }
 }
