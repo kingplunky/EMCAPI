@@ -96,7 +96,7 @@
       <dependency>
           <groupId>com.github.jwkerr</groupId>
           <artifactId>Quarters</artifactId>
-          <version>48301decf1</version> <!-- Quarters version 1.0.3 -->
+          <version>e9ed8a133a</version>
           <scope>provided</scope>
       </dependency>
       <dependency>
