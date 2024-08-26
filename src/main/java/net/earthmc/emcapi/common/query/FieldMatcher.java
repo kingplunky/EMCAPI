@@ -22,7 +22,7 @@ public class FieldMatcher<T> {
         Object fieldValue = retrieveFieldValue(object, fields);
 
         if (fieldValue == null) {
-            return matchesNullFieldValue(expectedValues);
+            return containsNull(expectedValues);
         }
 
         return matchFieldValue(fieldValue, fields, expectedValues);
@@ -59,7 +59,7 @@ public class FieldMatcher<T> {
      * @param expectedValues A list of expected values to be checked.
      * @return True if "null" is one of the expected values; otherwise, false.
      */
-    private static boolean matchesNullFieldValue(HashSet<String> expectedValues) {
+    private static boolean containsNull(HashSet<String> expectedValues) {
         return expectedValues.contains("null");
     }
 
@@ -78,6 +78,8 @@ public class FieldMatcher<T> {
         Class<?> fieldType = fields.get(fields.size() - 1).getType();
 
         for (String expectedValue : expectedValues) {
+            if (expectedValue.equals("null")) continue;
+
             Object castedExpectedValue;
 
             try {
