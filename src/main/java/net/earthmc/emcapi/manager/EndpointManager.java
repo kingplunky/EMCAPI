@@ -2,6 +2,7 @@ package net.earthmc.emcapi.manager;
 
 import io.javalin.Javalin;
 import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.endpoints.nation.NationEndpoint;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
 import net.earthmc.emcapi.endpoints.town.TownEndpoint;
 import net.milkbowl.vault.economy.Economy;
@@ -20,7 +21,8 @@ public class EndpointManager {
 
         endpoints = new ArrayList<>(List.of(
                 new PlayerEndpoint(javalin, economy),
-                new TownEndpoint(javalin)
+                new TownEndpoint(javalin),
+                new NationEndpoint(javalin)
         ));
     }
 

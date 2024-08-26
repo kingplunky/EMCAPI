@@ -95,9 +95,9 @@ public class TownEndpoint extends Endpoint<Town> {
                                 .name(rank)
                                 .playerNames(town.getRank(rank).stream()
                                         .map(Resident::getName)
-                                        .collect(Collectors.toList()))
+                                        .toList())
                                 .build())
-                        .collect(Collectors.toList()))
+                        .toList())
                 .build();
     }
 

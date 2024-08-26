@@ -45,7 +45,7 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
             int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
 
             try {
-                ctx.json(new PaginatedResponse<T>(results, page, 100));
+                ctx.json(new PaginatedResponse<>(results, page, 100));
 
             } catch (IllegalArgumentException e) {
                 ctx.status(400).result(e.getMessage());
@@ -57,8 +57,14 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
 
 
     private List<Query<T>> javalinContextToQuery(Context ctx) {
+        String body = ctx.body().strip();
+
+        if (body.isBlank()) {
+            return new ArrayList<>();
+        }
+
         try {
-            List<Query<T>> queries = objectMapper.readValue(ctx.body(), new TypeReference<List<Query<T>>>() {});
+            List<Query<T>> queries = objectMapper.readValue(body, new TypeReference<>() {});
 
             List<String> errors = queries.stream()
                     .flatMap(q -> q.validate().stream())
@@ -70,7 +76,7 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
             return queries;
 
         } catch (Exception e) {
-            ctx.status(400).result("Invalid json body: " + e.getMessage());
+            ctx.status(400).json(List.of("Invalid json body: " + e.getMessage()));
             return null;
         }
     }
