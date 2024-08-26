@@ -30,8 +30,8 @@ public class PrimitiveTypeConverter {
         typeConverters.put(UUID.class, UUID::fromString);
     }
 
-    public Object castStringToType(String value, Class<?> targetType) {
-        return typeConverters.get(targetType).apply(value);
+    public <T> T castStringToType(String value, Class<T> targetType) {
+        return (T) typeConverters.get(targetType).apply(value);
     }
 
     public boolean isSupported(Class<?> type) {
