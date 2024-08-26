@@ -15,6 +15,7 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Endpoint<T> implements IEndpoint<T> {
     protected ObjectMapper objectMapper;
@@ -99,9 +100,9 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
 
     @Override
     public List<T> query(List<Query<T>> queries) {
-        return objectsCache.get("").stream()
+        return objectsCache.get("").parallelStream()
                 .filter(object -> queries.stream().allMatch(query -> query.matches(object)))
-                .toList();
+                .collect(Collectors.toList());
 
     }
 
