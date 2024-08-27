@@ -1,4 +1,4 @@
-package net.earthmc.emcapi.endpoints;
+package net.earthmc.emcapi.util;
 
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import net.earthmc.emcapi.common.object.Spawn;

@@ -3,15 +3,13 @@ import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import io.javalin.Javalin;
 import net.earthmc.emcapi.common.Endpoint;
-import net.earthmc.emcapi.endpoints.EndpointUtil;
+import net.earthmc.emcapi.util.EndpointUtil;
 import net.earthmc.emcapi.endpoints.nation.NationEndpoint;
 import net.earthmc.emcapi.endpoints.player.object.*;
 import net.earthmc.emcapi.endpoints.town.TownEndpoint;
-import net.earthmc.emcapi.util.EndpointUtils;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerEndpoint extends Endpoint<Player> {

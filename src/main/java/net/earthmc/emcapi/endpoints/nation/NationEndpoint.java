@@ -7,13 +7,11 @@ import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import io.javalin.Javalin;
 import net.earthmc.emcapi.common.Endpoint;
 import net.earthmc.emcapi.common.object.Rank;
-import net.earthmc.emcapi.endpoints.EndpointUtil;
+import net.earthmc.emcapi.util.EndpointUtil;
 import net.earthmc.emcapi.endpoints.nation.object.*;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
-import net.earthmc.emcapi.endpoints.player.object.PlayerReference;
 import net.earthmc.emcapi.endpoints.town.TownEndpoint;
 import net.earthmc.emcapi.manager.NationMetadataManager;
-import net.milkbowl.vault.economy.Economy;
 
 import java.util.List;
 
