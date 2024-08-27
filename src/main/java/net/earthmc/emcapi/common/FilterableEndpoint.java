@@ -42,7 +42,7 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
         javalin.post(path , ctx -> {
             int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
 
-            List<Filter<T>> filters = getFiltersFromBody(ctx.body());
+            List<Filter<T>> filters = getFiltersFromBody(ctx);
             if (filters == null) return;
 
             List<T> results = this.filter(filters);
@@ -59,7 +59,8 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
     }
 
 
-    private List<Filter<T>> getFiltersFromBody(String body) {
+    private List<Filter<T>> getFiltersFromBody(Context ctx) {
+        String body = ctx.body();
 
         if (body.isBlank()) {
             return new ArrayList<>();
