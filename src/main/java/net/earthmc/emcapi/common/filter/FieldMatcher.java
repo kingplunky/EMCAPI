@@ -1,6 +1,7 @@
-package net.earthmc.emcapi.common.query;
+package net.earthmc.emcapi.common.filter;
 
-import net.earthmc.emcapi.common.Query;
+import net.earthmc.emcapi.common.Filter;
+
 import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +84,7 @@ public class FieldMatcher<T> {
             Object castedExpectedValue;
 
             try {
-                castedExpectedValue = Query.typeConverter.castStringToType(expectedValue, fieldType);
+                castedExpectedValue = Filter.typeConverter.castStringToType(expectedValue, fieldType);
             } catch (NumberFormatException e) {
                 throw new RuntimeException("Failed to cast expected value to field type", e);
             }

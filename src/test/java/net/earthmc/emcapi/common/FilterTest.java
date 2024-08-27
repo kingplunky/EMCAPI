@@ -8,22 +8,22 @@ import java.util.HashSet;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class QueryTest {
+public class FilterTest {
 
     @Test
     public void validate_validFieldPath_shouldPass() {
-        Query<Player> playerQuery = new Query<>(Player.class, "stats.numFriends", new HashSet<>(List.of("213")));
+        Filter<Player> playerFilter = new Filter<>(Player.class, "stats.numFriends", new HashSet<>(List.of("213")));
 
-        List<String> errors = playerQuery.validate();
+        List<String> errors = playerFilter.validate();
 
         assertTrue(errors.isEmpty(), "Expected no validation errors for valid field path");
     }
 
     @Test
     public void validate_invalidFieldPath_shouldReturnError() {
-        Query<Player> query = new Query<>(Player.class, "stats.invalidField", new HashSet<>(List.of("213")));
+        Filter<Player> filter = new Filter<>(Player.class, "stats.invalidField", new HashSet<>(List.of("213")));
 
-        List<String> errors = query.validate();
+        List<String> errors = filter.validate();
 
         assertFalse(errors.isEmpty(), "Expected validation errors for invalid field path");
         assertEquals(1, errors.size(), "Expected exactly one validation error");
@@ -32,16 +32,16 @@ public class QueryTest {
 
     @Test
     public void validate_primitiveFieldType_shouldPass() {
-        Query<Player> playerQuery = new Query<>(Player.class, "stats.numFriends", new HashSet<>(List.of("213")));
-        List<String> errors = playerQuery.validate();
+        Filter<Player> playerFilter = new Filter<>(Player.class, "stats.numFriends", new HashSet<>(List.of("213")));
+        List<String> errors = playerFilter.validate();
 
         assertTrue(errors.isEmpty(), "Expected no validation errors for valid primitive field path");
     }
 
     @Test
     public void validate_nonPrimitiveFieldType_shouldReturnError() {
-        Query<Player> playerQuery = new Query<>(Player.class, "stats", new HashSet<>(List.of("")));
-        List<String> errors = playerQuery.validate();
+        Filter<Player> playerFilter = new Filter<>(Player.class, "stats", new HashSet<>(List.of("")));
+        List<String> errors = playerFilter.validate();
 
         assertFalse(errors.isEmpty(), "Expected validation errors for non-primitive field type");
         assertEquals(1, errors.size(), "Expected exactly one validation error");
@@ -50,7 +50,7 @@ public class QueryTest {
 
     @Test
     public void matches_validateNotCalled_shouldThrowException() {
-        Query<Player> playerQuery = new Query<>(Player.class, "stats.numFriends", new HashSet<>(List.of("")));
+        Filter<Player> playerFilter = new Filter<>(Player.class, "stats.numFriends", new HashSet<>(List.of("")));
         Player player = Player.builder()
                 .stats(PlayerStats.builder()
                         .numFriends(10)
@@ -59,7 +59,7 @@ public class QueryTest {
 
 
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
-            playerQuery.matches(player);
+            playerFilter.matches(player);
         });
 
         assertTrue(exception.getMessage().contains("Ensure validation is called first"),

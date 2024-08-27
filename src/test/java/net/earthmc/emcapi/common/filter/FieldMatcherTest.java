@@ -1,4 +1,4 @@
-package net.earthmc.emcapi.common.query;
+package net.earthmc.emcapi.common.filter;
 
 import net.earthmc.emcapi.endpoints.nation.object.NationReference;
 import net.earthmc.emcapi.endpoints.player.object.Player;

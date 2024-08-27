@@ -27,22 +27,26 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
     }
 
     public void setup() {
+        // Set up the filter serializer
         objectMapper = createObjectMapper();
 
+        // Create a caffeine cache of filterable objects
         objectsCache = Caffeine.newBuilder()
                 .maximumSize(1)
                 .refreshAfterWrite(Duration.ofSeconds(10))
                 .build(key -> this.createObjects());
 
+
         String path = EndpointManager.BASE_URL + this.getPath();
 
         javalin.post(path , ctx -> {
-            List<Query<T>> queries = javalinContextToQuery(ctx);
-            if (queries == null) return;
-
-            List<T> results = this.query(queries);
-
             int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+
+            List<Filter<T>> filters = getFiltersFromBody(ctx.body());
+            if (filters == null) return;
+
+            List<T> results = this.filter(filters);
+
 
             try {
                 ctx.json(new PaginatedResponse<>(results, page, 100));
@@ -55,16 +59,14 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
     }
 
 
-
-    private List<Query<T>> javalinContextToQuery(Context ctx) {
-        String body = ctx.body().strip();
+    private List<Filter<T>> getFiltersFromBody(String body) {
 
         if (body.isBlank()) {
             return new ArrayList<>();
         }
 
         try {
-            List<Query<T>> queries = objectMapper.readValue(body, new TypeReference<>() {});
+            List<Filter<T>> queries = objectMapper.readValue(body, new TypeReference<>() {});
 
             List<String> errors = queries.stream()
                     .flatMap(q -> q.validate().stream())
@@ -81,8 +83,29 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
         }
     }
 
+    private ObjectMapper createObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(List.class, new FilterDeserializer<>(clazz));
+        objectMapper.registerModule(module);
 
+        return objectMapper;
+    }
+
+    @Override
+    public List<T> filter(List<Filter<T>> filters) {
+        return objectsCache.get("").parallelStream()
+                .filter(object -> filters.stream().allMatch(query -> query.matches(object)))
+                .toList();
+    }
+
+    /**
+     * Gets the class type from the type generic <T>.
+     * Must be called before `setup()` in the inheriting Endpoint object.
+     * Note: <a href="https://stackoverflow.com/questions/51388446/getactualtypearguments-with-parent-which-get-its-parametrized-type-from-the-chil">From this stackoverflow post.</a>
+     * @return
+     */
     @SuppressWarnings("unchecked")
     protected Class<T> reflectClassType() {
         Type genericSuperclass = getClass().getGenericSuperclass();
@@ -92,24 +115,5 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
             throw new IllegalArgumentException("Could not determine class type for generic T");
         }
     }
-
-    private ObjectMapper createObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(List.class, new QueryDeserializer<>(clazz));
-        objectMapper.registerModule(module);
-
-        return objectMapper;
-    }
-
-    @Override
-    public List<T> query(List<Query<T>> queries) {
-        return objectsCache.get("").parallelStream()
-                .filter(object -> queries.stream().allMatch(query -> query.matches(object)))
-                .toList();
-
-    }
-
 
 }

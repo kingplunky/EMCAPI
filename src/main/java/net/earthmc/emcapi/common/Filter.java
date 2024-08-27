@@ -1,21 +1,18 @@
 package net.earthmc.emcapi.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import net.earthmc.emcapi.common.annotations.UseSuperClass;
-import net.earthmc.emcapi.common.interfaces.IQuery;
-import net.earthmc.emcapi.common.query.FieldMatcher;
-import net.earthmc.emcapi.common.query.FieldPathParser;
-import net.earthmc.emcapi.common.query.FieldTypeValidator;
+import net.earthmc.emcapi.common.interfaces.IFilter;
+import net.earthmc.emcapi.common.filter.FieldMatcher;
+import net.earthmc.emcapi.common.filter.FieldPathParser;
+import net.earthmc.emcapi.common.filter.FieldTypeValidator;
 import net.earthmc.emcapi.util.PrimitiveTypeConverter;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 
-public class Query<T> implements IQuery<T> {
+public class Filter<T> implements IFilter<T> {
     @Getter private final String fieldPath;
     @Getter private final HashSet<String> expectedValues;
 
@@ -25,7 +22,7 @@ public class Query<T> implements IQuery<T> {
     private final FieldPathParser<T> fieldPathParser;
     public static final PrimitiveTypeConverter typeConverter = new PrimitiveTypeConverter();
 
-    public Query(Class<T> type, String fieldPath, HashSet<String> expectedValues) {
+    public Filter(Class<T> type, String fieldPath, HashSet<String> expectedValues) {
         this.type = type;
         this.fieldPath = fieldPath;
         this.expectedValues = expectedValues;
