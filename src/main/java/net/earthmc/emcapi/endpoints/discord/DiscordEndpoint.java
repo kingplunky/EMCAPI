@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.object.Resident;
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.objects.managers.AccountLinkManager;
 import io.javalin.Javalin;
-import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.common.FilterableEndpoint;
 import net.earthmc.emcapi.endpoints.discord.object.Discord;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class DiscordEndpoint extends Endpoint<Discord> {
+public class DiscordEndpoint extends FilterableEndpoint<Discord> {
     private final AccountLinkManager accountLinkManager = DiscordSRV.getPlugin().getAccountLinkManager();
 
     public DiscordEndpoint(Javalin javalin) {

@@ -5,7 +5,7 @@ import com.palmergames.bukkit.towny.TownyEconomyHandler;
 import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.permissions.TownyPerms;
 import io.javalin.Javalin;
-import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.common.FilterableEndpoint;
 import net.earthmc.emcapi.common.object.Rank;
 import net.earthmc.emcapi.util.EndpointUtil;
 import net.earthmc.emcapi.endpoints.nation.NationEndpoint;
@@ -16,7 +16,7 @@ import net.earthmc.emcapi.manager.TownMetadataManager;
 
 import java.util.List;
 
-public class TownEndpoint extends Endpoint<Town> {
+public class TownEndpoint extends FilterableEndpoint<Town> {
 
     public TownEndpoint(Javalin javalin) {
         super(javalin);

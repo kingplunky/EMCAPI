@@ -7,23 +7,22 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import net.earthmc.emcapi.common.interfaces.IEndpoint;
+import net.earthmc.emcapi.common.interfaces.IFilterableEndpoint;
 import net.earthmc.emcapi.manager.EndpointManager;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public abstract class Endpoint<T> implements IEndpoint<T> {
+
+public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
     protected ObjectMapper objectMapper;
     private final Javalin javalin;
     protected Class<T> clazz;
     private LoadingCache<String, List<T>> objectsCache;
 
-    public Endpoint(Javalin javalin) {
+    public FilterableEndpoint(Javalin javalin) {
         this.javalin = javalin;
     }
 

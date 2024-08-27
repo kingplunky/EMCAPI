@@ -1,13 +1,6 @@
 package net.earthmc.emcapi.common.interfaces;
 
-import net.earthmc.emcapi.common.Query;
-
-import java.util.List;
-
-public interface IEndpoint<T> {
+public interface IEndpoint {
     String getPath();
-
-    List<T> createObjects();
-
-    List<T> query(List<Query<T>> queries);
+    void setup();
 }

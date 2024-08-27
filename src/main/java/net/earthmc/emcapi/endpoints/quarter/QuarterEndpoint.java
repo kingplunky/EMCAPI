@@ -4,7 +4,7 @@ import au.lupine.quarters.api.manager.QuarterManager;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import io.javalin.Javalin;
-import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.common.FilterableEndpoint;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
 import net.earthmc.emcapi.endpoints.quarter.object.*;
 import net.earthmc.emcapi.endpoints.town.TownEndpoint;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 
-public class QuarterEndpoint extends Endpoint<Quarter> {
+public class QuarterEndpoint extends FilterableEndpoint<Quarter> {
     public QuarterEndpoint(Javalin javalin) {
         super(javalin);
         clazz = this.reflectClassType();

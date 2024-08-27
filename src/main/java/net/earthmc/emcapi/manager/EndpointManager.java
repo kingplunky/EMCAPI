@@ -1,7 +1,7 @@
 package net.earthmc.emcapi.manager;
 
 import io.javalin.Javalin;
-import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.common.FilterableEndpoint;
 import net.earthmc.emcapi.endpoints.discord.DiscordEndpoint;
 import net.earthmc.emcapi.endpoints.nation.NationEndpoint;
 import net.earthmc.emcapi.endpoints.player.PlayerEndpoint;
@@ -15,7 +15,7 @@ import java.util.List;
 public class EndpointManager {
 
     public static String BASE_URL;
-    private final List<Endpoint<?>> endpoints;
+    private final List<FilterableEndpoint<?>> endpoints;
 
     public EndpointManager(Javalin javalin, FileConfiguration config, Economy economy) {
         BASE_URL = "v3/" + config.getString("networking.url_path");
@@ -30,7 +30,7 @@ public class EndpointManager {
     }
 
     public void loadEndpoints() {
-        for (Endpoint<?> endpoint : endpoints) {
+        for (FilterableEndpoint<?> endpoint : endpoints) {
             endpoint.setup();
         }
     }

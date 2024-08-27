@@ -2,7 +2,7 @@ package net.earthmc.emcapi.endpoints.player;
 import com.palmergames.bukkit.towny.TownyAPI;
 import com.palmergames.bukkit.towny.object.Resident;
 import io.javalin.Javalin;
-import net.earthmc.emcapi.common.Endpoint;
+import net.earthmc.emcapi.common.FilterableEndpoint;
 import net.earthmc.emcapi.util.EndpointUtil;
 import net.earthmc.emcapi.endpoints.nation.NationEndpoint;
 import net.earthmc.emcapi.endpoints.player.object.*;
@@ -12,7 +12,7 @@ import org.bukkit.Bukkit;
 
 import java.util.List;
 
-public class PlayerEndpoint extends Endpoint<Player> {
+public class PlayerEndpoint extends FilterableEndpoint<Player> {
     private final Economy economy;
 
     public PlayerEndpoint(Javalin javalin, Economy economy) {
