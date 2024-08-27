@@ -36,6 +36,7 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
                 .build(key -> this.createObjects());
 
         String path = EndpointManager.BASE_URL + this.getPath();
+
         javalin.post(path , ctx -> {
             List<Query<T>> queries = javalinContextToQuery(ctx);
             if (queries == null) return;
@@ -107,7 +108,7 @@ public abstract class Endpoint<T> implements IEndpoint<T> {
     public List<T> query(List<Query<T>> queries) {
         return objectsCache.get("").parallelStream()
                 .filter(object -> queries.stream().allMatch(query -> query.matches(object)))
-                .collect(Collectors.toList());
+                .toList();
 
     }
 
