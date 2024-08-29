@@ -13,8 +13,13 @@ networking:
 
 behaviour:
 
-  # The maximum entries a player can enter when looking up objects by name
-  max_lookup_size: 100
+  filterable_endpoint:
+    #The maximum amount of values the user can check for each filter field.
+    max_expected_values: 100
+    #The maximum amount of field filters the user can use per query.
+    max_filters: 5
+    #The maximum amount of objects returned in each response.
+    page_size: 100
 
   # Setting for testing reasons
   developer_mode: false

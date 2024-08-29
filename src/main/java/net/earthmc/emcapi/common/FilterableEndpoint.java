@@ -17,13 +17,15 @@ import java.util.List;
 
 
 public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
-    protected ObjectMapper objectMapper;
+    private final EndpointManager endpointManager;
     private final Javalin javalin;
+    protected ObjectMapper objectMapper;
     protected Class<T> clazz;
     private LoadingCache<String, List<T>> objectsCache;
 
     public FilterableEndpoint(Javalin javalin) {
         this.javalin = javalin;
+        this.endpointManager = EndpointManager.getInstance();
     }
 
     public void setup() {
@@ -49,7 +51,7 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
 
 
             try {
-                ctx.json(new PaginatedResponse<>(results, page, 100));
+                ctx.json(new PaginatedResponse<>(results, page, endpointManager.PAGE_SIZE));
 
             } catch (IllegalArgumentException e) {
                 ctx.status(400).result(e.getMessage());
@@ -105,7 +107,7 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
      * Gets the class type from the type generic <T>.
      * Must be called before `setup()` in the inheriting Endpoint object.
      * Note: <a href="https://stackoverflow.com/questions/51388446/getactualtypearguments-with-parent-which-get-its-parametrized-type-from-the-chil">From this stackoverflow post.</a>
-     * @return
+     * @return The `Class<T>` for the generic type T
      */
     @SuppressWarnings("unchecked")
     protected Class<T> reflectClassType() {
