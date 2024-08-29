@@ -18,7 +18,7 @@ This fork achieves this by allowing responses to be filtered by specific field v
 ### Restructured Query System
 
 
-This fork introduces a new class called FilterableEndpoint<T>, which allows for .
+This fork introduces a new class called FilterableEndpoint<T>, which allows for:
 
 - **Generic Filtering**: With `FilterableEndpoint<T>`, you can now filter by any field within the object `T`.
 - **Flexible Queries**: The system supports a variety of filtering methods, including:
