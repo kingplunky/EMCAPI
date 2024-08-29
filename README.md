@@ -215,7 +215,7 @@ The field `nation.name` has been given 101 expected values, when the max is curr
 ### Better Responses with `PaginatedResponse<T>`
 When querying the api, responses from the `FilterableEndpoint<T>` class are broken into pages (the size of these pages are configurable), allowing the API to handle large queries effectively. 
 
-Because of this, you are able to request a filterable endpoint without specifying filters, allowing the user to easily retrieve a list of all the players on the server, without experiencing timeouts.
+Because of this, you are also able to request a filterable endpoint without specifying filters, allowing the user to easily retrieve a list of all the players on the server, without experiencing timeouts.
 
 #### **Example: Retrieving All Players**
 - **POST** `/v3/aurora/players?page=1` - (no json body, as no filter)
