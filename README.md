@@ -153,21 +153,21 @@ Incorrect field paths will also be flagged:
 - **POST** `/v3/aurora/players?page=1`
 ```json
 {
-  "nation..dsf..dsf.d": true,
-  "invalsid.field": 2,
-  "invsalid": ["world", "hello"],
-  "nation.as": true,
-  "nation.a": true
+  "nation..s...d": true,
+  "invalid.nested.field": 2,
+  "invalid": ["world", "hello"],
+  "nation.id": true,
+  "test.a": true
 }
 ```
 - **Response** - `400 - Bad Request`
 ```json
 [
-  "Player.nation.as is not a valid field.",
-  "Player.nation.a is not a valid field.",
-  "Player.nation..dsf..dsf.d is not a valid field.",
-  "Player.invalsid.field is not a valid field.",
-  "Player.invsalid is not a valid field."
+    "Player.invalid.nested.field is not a valid field.",
+    "Player.test.a is not a valid field.",
+    "Player.nation..s...d is not a valid field.",
+    "Player.invalid is not a valid field.",
+    "Player.nation.id is not a valid field."
 ]
 ```
 
