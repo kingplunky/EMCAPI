@@ -7,7 +7,7 @@ This version builds upon the original EMCAPI by improving how API data is retrie
 The primary focus of this fork is to eliminate the need to request all the data at endpoint 
 to determine simple things like which players are online or which players belong to specific nations.
 
-This fork achieves this by allow responses to be filtered by specific field values.
+This fork achieves this by allowing responses to be filtered by specific field values.
 
 ## New Features
 
