@@ -126,7 +126,7 @@ This query will return all offline players whose names are either "Largeezes" or
 }
 ```
 
-### Informative Error Handling
+### Informative Error Messages
 Since this new endpoint is a lot more flexible and allows for complex queries like the one above, it is also alot easier to make mistakes
 when querying the api. To help users correct these errors, the API provides informative error messages.
 
