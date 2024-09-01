@@ -69,16 +69,16 @@ public abstract class FilterableEndpoint<T> implements IFilterableEndpoint<T> {
         }
 
         try {
-            List<Filter<T>> queries = objectMapper.readValue(body, new TypeReference<>() {});
+            List<Filter<T>> filters = objectMapper.readValue(body, new TypeReference<>() {});
 
-            List<String> errors = queries.stream()
-                    .flatMap(q -> q.validate().stream())
+            List<String> errors = filters.stream()
+                    .flatMap(f -> f.validate().stream())
                     .toList();
 
 
             if (!errors.isEmpty()) {ctx.status(400).json(errors); return null;}
 
-            return queries;
+            return filters;
 
         } catch (Exception e) {
             ctx.status(400).json(List.of("Invalid json body: " + e.getMessage()));
