@@ -2,6 +2,7 @@ package net.earthmc.emcapi.common.filter;
 
 import net.earthmc.emcapi.endpoints.nation.object.NationReference;
 import net.earthmc.emcapi.endpoints.player.object.Player;
+import net.earthmc.emcapi.endpoints.player.object.PlayerReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -113,6 +114,22 @@ public class FieldMatcherTest {
 
         assertTrue(fieldMatcher.matches(player, fields, expectedValues),
                 "Expected the match to return true when any parent of the field path is null and 'null' is an expected value.");
+    }
+
+    @Test
+    void matches_listOfFieldValuesMatchExpectedValue_shouldReturnTrue() throws NoSuchFieldException {
+        Player player = Player.builder()
+                .friends(List.of(PlayerReference.builder()
+                        .name("Largeezes")
+                        .uuid(UUID.randomUUID()).build()))
+                .build();
+
+        List<Field> fields = fieldPathParser.parse("friends.name");
+
+        HashSet<String> expectedValues = new HashSet<>(List.of("Largeezes"));
+
+        assertTrue(fieldMatcher.matches(player, fields, expectedValues),
+                "Expected the match to return true when the field path is a list of object and the expected value is within.");
     }
 
 }

@@ -3,8 +3,11 @@ package net.earthmc.emcapi.common.filter;
 import net.earthmc.emcapi.common.annotations.UseSuperClass;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class FieldPathParser<T> {
     private final Class<?> type;
@@ -42,13 +45,28 @@ public class FieldPathParser<T> {
             Field field = currentClass.getDeclaredField(fieldName);
             field.setAccessible(true);
 
+            currentClass = getCollectionTypeIfAvailable(field.getType(), field.getGenericType());
 
-            currentClass = field.getType().isAnnotationPresent(UseSuperClass.class) ?
-                    field.getType().getSuperclass() : field.getType();
+            currentClass = currentClass.isAnnotationPresent(UseSuperClass.class) ?
+                    currentClass.getSuperclass() : currentClass;
 
             fields.add(field);
         }
 
         return fields;
+    }
+
+    private static Class<?> getCollectionTypeIfAvailable(Class<?> rawType, Type genericType) {
+        if (List.class.isAssignableFrom(rawType) || Set.class.isAssignableFrom(rawType)) {
+            if (genericType instanceof ParameterizedType parameterizedType) {
+                Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+
+                if (actualTypeArguments.length > 0 && actualTypeArguments[0] instanceof Class<?>) {
+                    return (Class<?>) actualTypeArguments[0];
+                }
+            }
+        }
+
+        return rawType;
     }
 }
